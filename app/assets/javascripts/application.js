@@ -16,3 +16,6 @@
 //= require underscore
 //= require backbone
 //= require noiseAlert
+//= require_tree ./collections
+//= require_tree ../templates
+//= require_tree ./views
