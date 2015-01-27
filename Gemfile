@@ -6,8 +6,11 @@ gem 'rails', '4.0.2'
 # Use postgresql as the database for Active Record
 gem 'pg'
 
+# Use bootstrap css
+gem 'bootstrap-sass', '~> 3.2.0'
+
 # Use SCSS for stylesheets
-gem 'sass-rails', '~> 4.0.0'
+gem 'sass-rails', '>= 3.2'
 
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
@@ -32,6 +35,23 @@ group :doc do
   gem 'sdoc', require: false
 end
 
+group :development do
+  # Run 'annotate' in Terminal to add helpful comments to models
+  gem 'annotate'
+  # These two give you a great error handling page.
+  # But make sure to never use them in production!
+  gem 'better_errors'
+  gem 'meta_request'
+  gem 'binding_of_caller'
+  # Gotta have debugger.
+  gem 'debugger'
+  # pry > irb
+  gem 'pry-rails'
+end
+
+group :production do 
+  gem 'rails_12factor', '0.0.2'
+end
 # Use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.1.2'
 
