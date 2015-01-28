@@ -121,23 +121,44 @@ $(document).ready(function() {
       	App.decibels.add([{ 
       		value: num
       	}]);
-        if(num > 0.01) {
+        // this is the threshold
+        if(num > App.decibels.threshold) {
+          sendMsg = false;
+          if(App.decibels.highPoints.length < 3) {
+              App.decibels.highPoints.push(num);
+              sendMsg = true;
+          } else {
+              var minHighPoint = App.decibels.highPoints.shift(); 
+              if(num > minHighPoint) {
+                  App.decibels.highPoints.push(num);
+                  sendMsg = true;
+              } else {
+                  App.decibels.highPoints.push(minHighPoint);
+              }
+          }
 
-            // array
+          if(sendMsg) {
+            App.decibels.payload['text'] = "It's noisy! The noise level is " + num;
+            App.decibels.doCORSRequest({
+                method: 'POST',
+                url: App.decibels.api,
+                content: 'application/json',
+                data: JSON.stringify(App.decibels.payload)
+              }, function printResult(result) {
+            });
+          }
+          App.decibels.highPoints.sort();
+          
+          console.log(App.decibels.highPoints);
 
-            if(App.decibels.highPoints.length < 3) {
-                App.decibels.highPoints.push(num);
-            } else {
-                var minHighPoint = App.decibels.highPoints.shift(); 
-                if(num > minHighPoint) {
-                    App.decibels.highPoints.push(num);
-                } else {
-                    App.decibels.highPoints.push(minHighPoint);
-                }
-            }
-            App.decibels.highPoints.sort();
-            
-            // console.log(App.decibels.highPoints);
+            // App.decibels.doCORSRequest({
+            //     method: 'POST',
+            //     url: App.decibels.api,
+            //     content: 'application/json',
+            //     data: JSON.stringify(App.decibels.payload)
+            //   }, function printResult(result) {
+            //     console.log(result);
+            // });
 
             // payload.text = soundMeter.instant.toFixed(2);
             // doCORSRequest({
@@ -155,7 +176,7 @@ $(document).ready(function() {
         //   soundMeter.slow.toFixed(2);
         // clipMeter.value = clipValueDisplay.innerText =
         //   soundMeter.clip;
-      }, 2000);
+      }, 1000);
     }
 
     function errorCallback(error) {

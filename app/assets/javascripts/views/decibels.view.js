@@ -10,7 +10,7 @@ App.Views.Decibels = Backbone.View.extend({
 
 	className: '',
 
-	threshold: '200',
+	threshold: '60',
 
 	events: {
 	    'submit form': 'submitForm'
@@ -28,6 +28,7 @@ App.Views.Decibels = Backbone.View.extend({
 							.domain([0, 1])
 							.range([15, this.h - 5]);
 	    this.threshold = scale(params.threshold);
+	    this.collection.threshold = params.threshold;
 
 	},
 
@@ -74,9 +75,9 @@ App.Views.Decibels = Backbone.View.extend({
 		this.svg.selectAll('line').remove();
 		var line = this.svg.append('line')
 						   .attr('x1', 0)
-						   .attr('y1', this.h - this.threshold)
+						   .attr('y1', this.h - this.threshold - 15)
 						   .attr('x2', w)
-						   .attr('y2', this.h - this.threshold)
+						   .attr('y2', this.h - this.threshold - 15)
 						   .attr('stroke', 'teal')
 						   .attr('stroke-width', 2);
 		// render axis
@@ -98,7 +99,7 @@ App.Views.Decibels = Backbone.View.extend({
 		var yAxis = d3.svg.axis()
 							.scale(yScale)
 							.orient('left')
-							.ticks(5);
+							.ticks(9);
 		this.svg.append('g')
 				.attr('class', 'axis')
 				.attr('transform', 'translate(30, 0)')
