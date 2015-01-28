@@ -1,6 +1,15 @@
 // Place all the styles related to the static controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+* {
+    font-family: 'Lato', sans-serif;
+}
+.info {
+    .panel-heading {
+        font-family: 'Lato', sans-serif;
+        color: #4fa05b
+    }
+}
 
 form {
     padding: 15px;
