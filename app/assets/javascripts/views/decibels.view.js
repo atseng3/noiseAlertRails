@@ -10,7 +10,7 @@ App.Views.Decibels = Backbone.View.extend({
 
 	className: '',
 
-	threshold: '60',
+	threshold: 0.2,
 
 	events: {
 	    'submit form': 'submitForm',
@@ -36,16 +36,13 @@ App.Views.Decibels = Backbone.View.extend({
 	    var params = $(event.currentTarget).serializeJSON();
 
 	    var phone = params.phone ? params.phone.match(/\d+/gi).join() : '';
-	    debugger
+
 	    if(params.threshold) {
 	    	if(params.threshold > 1 || params.threshold < 0) {
 				this.$el.parent().prepend('<div class="alert alert-danger" role="alert">This is not the right threshold format, please try again.</div>');
 		    	$('.alert-danger').hide(4000);
 		    } else {
-		    	var scale = d3.scale.linear()
-								.domain([0, 1])
-								.range([15, this.h - 5]);
-			    this.threshold = scale(params.threshold);
+			    this.threshold = params.threshold;
 			    this.collection.threshold = params.threshold;
 		    }
 	    }
@@ -99,20 +96,26 @@ App.Views.Decibels = Backbone.View.extend({
 		             .attr('fill', function(d) {
 		                return 'rgb(' + (d * 1000) + ', 0, 0)';
 		             });
-		// render threshold line
-		this.svg.selectAll('line').remove();
-		var line = this.svg.append('line')
-						   .attr('x1', 0)
-						   .attr('y1', this.h - this.threshold - 15)
-						   .attr('x2', w)
-						   .attr('y2', this.h - this.threshold - 15)
-						   .attr('stroke', 'teal')
-						   .attr('stroke-width', 2);
-		// render axis
+		// define scale
 		var yScale = d3.scale.linear()
 							 .domain([0, 1]).range([h - 20, 5]);
 		var xScale = d3.scale.linear()
 							 .domain([0, w]).range([30, w - 0 * 2]);
+		// debugger
+		// render threshold line
+		this.svg.selectAll('line').remove();
+		var line = this.svg.append('line')
+						   .attr('x1', 0)
+						   .attr('y1', yScale(this.threshold))
+						   .attr('x2', w)
+						   .attr('y2', yScale(this.threshold))
+						   .attr('stroke', 'teal')
+						   .attr('stroke-width', 2);
+		// this.svg.selectAll('text').remove();
+		
+				// .attr('text-')
+
+		// render axis
 		this.svg.selectAll('g').remove();
 
 		var xAxis = d3.svg.axis()
@@ -132,6 +135,19 @@ App.Views.Decibels = Backbone.View.extend({
 				.attr('class', 'axis')
 				.attr('transform', 'translate(30, 0)')
 				.call(yAxis);
+				debugger
+		this.svg.selectAll("text.labels").remove();
+		var label = this.svg.selectAll("text.labels")
+						       .data([this.threshold])
+						       .enter()
+						       .append("text")
+						       .text(function(d) {return d})
+						       .attr('class', 'labels')
+						       .attr('x', w - 20)
+						       .attr('y', yScale(this.threshold) - 2)
+						       .attr('font-family', 'sans-serif')
+						       .attr('font-size', '13px')
+						       .attr('fill', 'black');
 
 		// get where the focus is
 		var focusedElement = $(':focus');
