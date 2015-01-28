@@ -18,9 +18,9 @@ App.Views.Decibels = Backbone.View.extend({
 	    'click #stop': 'stopInterval'
 	},
 
-	h: 300,
+	w: $('.container-fluid').width(),
 
-	w: 900,
+	h: 300,
 
 	stopInterval: function(event) {
 		event.preventDefault();
@@ -57,15 +57,33 @@ App.Views.Decibels = Backbone.View.extend({
 
 	},
 
+	resizeContent: function() {
+		    var targetWidth = $('#visualizer').width();
+		    this.w = targetWidth;
+		    this.h = this.w * 0.3;
+		    $('svg').attr('width', this.w);
+		    this.svg.attr('height', this.h)
+		    this.render();
+	},
+
+	remove: function() {
+		$(window).off('resize', this.resizeContent);
+		Backbone.View.prototype.remove.apply(this, arguments);
+	},
+
 	initialize: function () {
 		this.listenTo(this.collection, 'add', this.render);
-		var h = 300;
-		var w = 900;
+
+		$(window).on('resize', $.proxy(this.resizeContent, this));
+		// var h = this.h;
+		this.w = $('.container-fluid').width();
+		var aspect = 0.3;
+		this.h = this.w * aspect
 		var barPadding = 1;
 		this.svg = d3.select('#visualizer')
 		                      .append('svg')
-		                      .attr('width', w)
-		                      .attr('height', h);
+		                      .attr('width', this.w)
+		                      .attr('height', this.h);
 	    this.render();
 	},
 
@@ -101,7 +119,7 @@ App.Views.Decibels = Backbone.View.extend({
 							 .domain([0, 1]).range([h - 20, 5]);
 		var xScale = d3.scale.linear()
 							 .domain([0, w]).range([30, w - 0 * 2]);
-							 
+
 		// render threshold line
 		this.svg.selectAll('line').remove();
 		var line = this.svg.append('line')
