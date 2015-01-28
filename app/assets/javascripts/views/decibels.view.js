@@ -35,17 +35,27 @@ App.Views.Decibels = Backbone.View.extend({
 	    event.preventDefault();
 	    var params = $(event.currentTarget).serializeJSON();
 
-	    var phone = params.phone ? params.phone.match(/\d+/gi).join() : [];
-	    if(phone.length != 10 || params.threshold > 1 || params.threshold < 1) {
-	    	this.$el.parent().prepend('<div class="alert alert-danger" role="alert">This is not the right format, please try again.</div>');
-	    	$('.alert-danger').hide(4000);
-	    } else {
-		    this.collection.payload['contacts'] = '+1' + params.phone;	
-		    var scale = d3.scale.linear()
-							.domain([0, 1])
-							.range([15, this.h - 5]);
-		    this.threshold = scale(params.threshold);
-		    this.collection.threshold = params.threshold;
+	    var phone = params.phone ? params.phone.match(/\d+/gi).join() : '';
+	    debugger
+	    if(params.threshold) {
+	    	if(params.threshold > 1 || params.threshold < 0) {
+				this.$el.parent().prepend('<div class="alert alert-danger" role="alert">This is not the right threshold format, please try again.</div>');
+		    	$('.alert-danger').hide(4000);
+		    } else {
+		    	var scale = d3.scale.linear()
+								.domain([0, 1])
+								.range([15, this.h - 5]);
+			    this.threshold = scale(params.threshold);
+			    this.collection.threshold = params.threshold;
+		    }
+	    }
+	    if(phone) {
+	    	if(phone.length != 10) {
+	    		this.$el.parent().prepend('<div class="alert alert-danger" role="alert">This is not the right phone format, please try again.</div>');
+		    	$('.alert-danger').hide(4000);	
+	    	} else {
+	    		this.collection.payload['contacts'] = '+1' + params.phone;	
+	    	}
 	    }
 
 	},

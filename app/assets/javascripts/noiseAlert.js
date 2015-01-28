@@ -158,43 +158,10 @@ $(document).ready(function() {
           }
           App.decibels.highPoints.sort();
           
-          console.log(App.decibels.highPoints);
-
-            // App.decibels.doCORSRequest({
-            //     method: 'POST',
-            //     url: App.decibels.api,
-            //     content: 'application/json',
-            //     data: JSON.stringify(App.decibels.payload)
-            //   }, function printResult(result) {
-            //     console.log(result);
-            // });
-
-            // payload.text = soundMeter.instant.toFixed(2);
-            // doCORSRequest({
-            //     method: 'POST',
-            //     url: api,
-            //     content: 'application/json',
-            //     data: JSON.stringify(payload)
-            //   }, function printResult(result) {
-            //     console.log(result);
-            // });
         }
-        // instantMeter.value = instantValueDisplay.innerText =
-        //   soundMeter.instant.toFixed(2);
-        // slowMeter.value = slowValueDisplay.innerText =
-        //   soundMeter.slow.toFixed(2);
-        // clipMeter.value = clipValueDisplay.innerText =
-        //   soundMeter.clip;
       }, 1000);
 
-      // clearInterval(interval);
     }
-
-    // function myStopFunction() {
-    //   clearInterval(TimeInterval);
-    // }
-
-
 
     function errorCallback(error) {
       console.log('navigator.getUserMedia error: ', error);
