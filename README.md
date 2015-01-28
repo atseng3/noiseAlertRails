@@ -1,7 +1,7 @@
 README
 =======
 
-> [Noise Alert](https://sleepy-falls-1191.herokuapp.com/ "noise-alert")
+> [Click to see DEMO!!](https://sleepy-falls-1191.herokuapp.com/ "Noise Alert")
 
 > This is a Noise Alert Application. It uses WebRTC Audio Components to detect sound and D3.js to generate a visualizer.
 
