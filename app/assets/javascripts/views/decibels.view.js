@@ -18,9 +18,11 @@ App.Views.Decibels = Backbone.View.extend({
 	    'click #stop': 'stopInterval'
 	},
 
-	w: $('.container-fluid').width(),
+	w: 900,
 
 	h: 300,
+
+	aspect: 0.3,
 
 	stopInterval: function(event) {
 		event.preventDefault();
@@ -60,8 +62,8 @@ App.Views.Decibels = Backbone.View.extend({
 	resizeContent: function() {
 		    var targetWidth = $('#visualizer').width();
 		    this.w = targetWidth;
-		    this.h = this.w * 0.3;
-		    $('svg').attr('width', this.w);
+		    this.h = this.w * this.aspect;
+		    this.svg.attr('width', this.w);
 		    this.svg.attr('height', this.h)
 		    this.render();
 	},
@@ -75,11 +77,8 @@ App.Views.Decibels = Backbone.View.extend({
 		this.listenTo(this.collection, 'add', this.render);
 
 		$(window).on('resize', $.proxy(this.resizeContent, this));
-		// var h = this.h;
 		this.w = $('.container-fluid').width();
-		var aspect = 0.3;
-		this.h = this.w * aspect
-		var barPadding = 1;
+		this.h = this.w * this.aspect
 		this.svg = d3.select('#visualizer')
 		                      .append('svg')
 		                      .attr('width', this.w)
