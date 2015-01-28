@@ -92,7 +92,7 @@ App.Views.Decibels = Backbone.View.extend({
 		var w = this.w;
 		var barPadding = 1;
 		var scale = d3.scale.linear()
-							.domain([0, 1])
+							.domain([0, 0.5])
 							.range([0, h]);
 		// render audio bars
 		this.svg.selectAll('rect').remove();
@@ -115,7 +115,7 @@ App.Views.Decibels = Backbone.View.extend({
 		             });
 		// define scale
 		var yScale = d3.scale.linear()
-							 .domain([0, 1]).range([h - 20, 5]);
+							 .domain([0, 0.5]).range([h - 20, 5]);
 		var xScale = d3.scale.linear()
 							 .domain([0, w]).range([30, w - 0 * 2]);
 

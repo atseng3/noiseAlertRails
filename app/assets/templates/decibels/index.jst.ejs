@@ -1,26 +1,36 @@
 <form>
 	<div>
-	<label for="phone">Sending to <span style="color: #4fa05b;"><%- phone %></span></label>
+	<label for="phone">Sending to <span class="green"><%- phone %></span></label>
     <input id="phone" type="text" name="phone" tabindex="1" placeholder="Send to Cell Phone Number" name="user-input[phone]">
-    <label for="threshold">Threshold is at <span style="color: #4fa05b;"><%- threshold %></span></label>
+    <label for="threshold">Threshold is at <span class="green"><%- threshold %></span></label>
     <input id="threshold" type="text" name="threshold" tabindex="2" placeholder="Set Threshold (0-1)" name="user-input[threshold]">
     <button type="submit" tabindex="3" class="sendBtn submitBtn">Submit</button>
     <button id="stop" type="button" class="sendBtn">Stop time</button>
 	</div>
 </form>
 
-
-<div class="panel-body info">
-	<div class="panel-heading">
-		<h3 class="panel-title">The top 3 highest output time periods are the following:</h3>
-	</div>
-	<div >
-		<ul>
-			<% if(highest.length != 0) { %> 
-				<% $(highest).each(function(index, num) { %>
-					<li><%= String(num) %></li>
-				<% }) %>
-			<% } %>
-		</ul>	
-	</div>
-</div>
+<table class="info">
+    <thead>
+        <tr>
+            <th>    
+                <h4>The top 3 highest output time periods are the following:</h4>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+    	<% if(highest.length != 0) { %> 
+			<% $(highest).each(function(index, num) { %>
+				<tr>
+					<td>
+						<h4>Lots of noise! -> <%= String(num) %></h4>
+					</td>
+				</tr>
+			<% }) %>
+		<% } %>
+        <tr>
+            <td>
+                <a href="#">View more</a>
+            </td>
+        </tr>
+    </tbody>
+</table>
