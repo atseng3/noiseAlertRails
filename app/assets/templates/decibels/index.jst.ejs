@@ -1,6 +1,8 @@
 <form>
 	<div>
+	<label for="phone">Sending to <span style="color: #4fa05b;"><%- phone %></span></label>
     <input id="phone" type="text" name="phone" tabindex="1" placeholder="Send to Cell Phone Number" name="user-input[phone]">
+    <label for="threshold">Threshold is at <span style="color: #4fa05b;"><%- threshold %></span></label>
     <input id="threshold" type="text" name="threshold" tabindex="2" placeholder="Set Threshold (0-1)" name="user-input[threshold]">
     <button type="submit" tabindex="3" class="sendBtn submitBtn">Submit</button>
     <button id="stop" type="button" class="sendBtn">Stop time</button>

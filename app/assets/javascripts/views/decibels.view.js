@@ -176,7 +176,9 @@ App.Views.Decibels = Backbone.View.extend({
 		var thresholdVal = $('#threshold').val();
 
 	    this.$el.html(this.template({
-	    	decibels: this.collection,
+	    	phone: this.collection.payload.contacts[0],
+	    	threshold: this.threshold,
+	    	// decibels: this.collection,
 	    	highest: this.collection.highPoints
 	    }));
 
