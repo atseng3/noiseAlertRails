@@ -116,13 +116,22 @@ $(document).ready(function() {
       var soundMeter = window.soundMeter = new SoundMeter(window.audioContext);
       soundMeter.connectToSource(stream);
 
-      setInterval(function() {
+      App.decibels.soundMeter = soundMeter;
+
+      App.decibels.interval = setInterval(function() {
       	var num = parseFloat(soundMeter.slow.toFixed(2));
+        var threshold = parseFloat(App.decibels.threshold);
       	App.decibels.add([{ 
       		value: num
       	}]);
+
+        var scale = d3.scale.linear()
+              .domain([0, 1])
+              .range([15, 300 - 5]);
+
         // this is the threshold
-        if(num > App.decibels.threshold) {
+        if(scale(num) > 60) {
+          console.log('in here');
           sendMsg = false;
           if(App.decibels.highPoints.length < 3) {
               App.decibels.highPoints.push(num);
@@ -177,7 +186,15 @@ $(document).ready(function() {
         // clipMeter.value = clipValueDisplay.innerText =
         //   soundMeter.clip;
       }, 1000);
+
+      // clearInterval(interval);
     }
+
+    // function myStopFunction() {
+    //   clearInterval(TimeInterval);
+    // }
+
+
 
     function errorCallback(error) {
       console.log('navigator.getUserMedia error: ', error);

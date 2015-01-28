@@ -13,22 +13,40 @@ App.Views.Decibels = Backbone.View.extend({
 	threshold: '60',
 
 	events: {
-	    'submit form': 'submitForm'
+	    'submit form': 'submitForm',
+	    'change form': 'validateForm',
+	    'click #stop': 'stopInterval'
 	},
 
 	h: 300,
 
 	w: 900,
 
+	stopInterval: function(event) {
+		event.preventDefault();
+		clearInterval(this.collection.interval);
+	},
+
+	validateForm: function() {
+
+	},
+
 	submitForm: function(event) {
 	    event.preventDefault();
 	    var params = $(event.currentTarget).serializeJSON();
-	    this.collection.payload['contacts'] = '+1' + params.phone;
-	    var scale = d3.scale.linear()
+
+	    var phone = params.phone ? params.phone.match(/\d+/gi).join() : [];
+	    if(phone.length != 10 || params.threshold > 1 || params.threshold < 1) {
+	    	this.$el.parent().prepend('<div class="alert alert-danger" role="alert">This is not the right format, please try again.</div>');
+	    	$('.alert-danger').hide(4000);
+	    } else {
+		    this.collection.payload['contacts'] = '+1' + params.phone;	
+		    var scale = d3.scale.linear()
 							.domain([0, 1])
 							.range([15, this.h - 5]);
-	    this.threshold = scale(params.threshold);
-	    this.collection.threshold = params.threshold;
+		    this.threshold = scale(params.threshold);
+		    this.collection.threshold = params.threshold;
+	    }
 
 	},
 
@@ -113,10 +131,9 @@ App.Views.Decibels = Backbone.View.extend({
 		var phoneVal = $('#phone').val();
 		var thresholdVal = $('#threshold').val();
 
-
-
 	    this.$el.html(this.template({
-	    	decibels: this.collection
+	    	decibels: this.collection,
+	    	highest: this.collection.highPoints
 	    }));
 
 	    // put value back on input
