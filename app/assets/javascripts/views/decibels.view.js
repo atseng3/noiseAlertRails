@@ -101,7 +101,7 @@ App.Views.Decibels = Backbone.View.extend({
 							 .domain([0, 1]).range([h - 20, 5]);
 		var xScale = d3.scale.linear()
 							 .domain([0, w]).range([30, w - 0 * 2]);
-		// debugger
+							 
 		// render threshold line
 		this.svg.selectAll('line').remove();
 		var line = this.svg.append('line')
@@ -135,7 +135,8 @@ App.Views.Decibels = Backbone.View.extend({
 				.attr('class', 'axis')
 				.attr('transform', 'translate(30, 0)')
 				.call(yAxis);
-				debugger
+
+		// add label to threshold line
 		this.svg.selectAll("text.labels").remove();
 		var label = this.svg.selectAll("text.labels")
 						       .data([this.threshold])

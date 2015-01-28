@@ -130,7 +130,8 @@ $(document).ready(function() {
               .range([15, 300 - 5]);
 
         // this is the threshold
-        if(scale(num) > 60) {
+
+        if(num > App.decibels.threshold) {
           console.log('in here');
           sendMsg = false;
           if(App.decibels.highPoints.length < 3) {
