@@ -2,8 +2,8 @@
 	<div>
 	<label for="phone">Sending to <span class="green"><%- phone %></span></label>
     <input id="phone" type="text" name="phone" tabindex="1" placeholder="Send to Cell Phone Number" name="user-input[phone]">
-    <label for="threshold">Threshold is at <span class="green"><%- threshold %></span></label>
-    <input id="threshold" type="text" name="threshold" tabindex="2" placeholder="Set Threshold (0-1)" name="user-input[threshold]">
+    <label for="threshold">Threshold is at <span class="green"><%- threshold %>dB</span></label>
+    <input id="threshold" type="text" name="threshold" tabindex="2" placeholder="Set Threshold (0-50)" name="user-input[threshold]">
     <button type="submit" tabindex="3" class="sendBtn submitBtn">Submit</button>
     <button id="stop" type="button" class="sendBtn">Stop time</button>
 	</div>
@@ -19,10 +19,10 @@
     </thead>
     <tbody>
     	<% if(highest.length != 0) { %> 
-			<% $(highest).each(function(index, num) { %>
+			<% $(highest).each(function(index, obj) { %>
 				<tr>
 					<td>
-						<h4>Lots of noise! -> <%= String(num) %></h4>
+						<h4>Lots of noise! -> <%= obj.num + 'dB @ ' + obj.seconds + 's' %></h4>
 					</td>
 				</tr>
 			<% }) %>

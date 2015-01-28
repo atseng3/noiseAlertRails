@@ -40,7 +40,7 @@ $(document).ready(function() {
       this.context = context;
       this.instant = 0.0;
       this.slow = 0.0;
-      this.clip = 0.0;
+      // this.clip = 0.0;
       this.script = context.createScriptProcessor(2048, 1, 1);
       var that = this;
       this.script.onaudioprocess = function(event) {
@@ -50,13 +50,16 @@ $(document).ready(function() {
         var clipcount = 0;
         for (i = 0; i < input.length; ++i) {
           sum += input[i] * input[i];
-          if (Math.abs(input[i]) > 0.99) {
-            clipcount += 1;
-          }
+          // if (Math.abs(input[i]) > 0.99) {
+          //   clipcount += 1;
+          // }
         }
         that.instant = Math.sqrt(sum / input.length);
         that.slow = 0.95 * that.slow + 0.05 * that.instant;
-        that.clip = clipcount / input.length;
+        // that.clip = clipcount / input.length;
+        // console.log('instant ' + that.instant);
+        // console.log('slow ' + that.slow);
+        // console.log('clip ' + that.clip);
       };
     }
 
@@ -86,14 +89,6 @@ $(document).ready(function() {
 
     'use strict';
 
-    var instantMeter = document.querySelector('#instant meter');
-    var slowMeter = document.querySelector('#slow meter');
-    var clipMeter = document.querySelector('#clip meter');
-
-    var instantValueDisplay = document.querySelector('#instant .value');
-    var slowValueDisplay = document.querySelector('#slow .value');
-    var clipValueDisplay = document.querySelector('#clip .value');
-
     try {
       window.AudioContext = window.AudioContext || window.webkitAudioContext;
       window.audioContext = new AudioContext();
@@ -110,6 +105,16 @@ $(document).ready(function() {
     navigator.getUserMedia = navigator.getUserMedia ||
       navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
 
+    function compare(a,b) {
+      if(a.num > b.num) {
+        return 1;
+      }
+      if(a.num < b.num) {
+        return -1;
+      }
+      return 0;
+    }  
+
     function successCallback(stream) {
       // Put variables in global scope to make them available to the browser console.
       window.stream = stream;
@@ -119,36 +124,34 @@ $(document).ready(function() {
       App.decibels.soundMeter = soundMeter;
 
       App.decibels.interval = setInterval(function() {
-      	var num = parseFloat(soundMeter.slow.toFixed(2));
+        App.decibels.time += 1;
+      	var num = parseFloat(soundMeter.slow.toFixed(2)) * 100;
         var threshold = parseFloat(App.decibels.threshold);
       	App.decibels.add([{ 
       		value: num
       	}]);
 
-        var scale = d3.scale.linear()
-              .domain([0, 1])
-              .range([15, 300 - 5]);
-
         // this is the threshold
 
         if(num > App.decibels.threshold) {
-          console.log('in here');
+
           sendMsg = false;
           if(App.decibels.highPoints.length < 3) {
-              App.decibels.highPoints.push(num);
+              App.decibels.highPoints.push({num: num, seconds: App.decibels.time });
               sendMsg = true;
           } else {
               var minHighPoint = App.decibels.highPoints.shift(); 
-              if(num > minHighPoint) {
-                  App.decibels.highPoints.push(num);
+              if(num > minHighPoint.num) {
+                  App.decibels.highPoints.push({num: num, seconds: App.decibels.time });
                   sendMsg = true;
               } else {
+                // App.decibels.highPoints.push({num: num, seconds: App.decibels.time });
                   App.decibels.highPoints.push(minHighPoint);
               }
           }
 
           if(sendMsg) {
-            App.decibels.payload['text'] = "It's noisy! The noise level is " + num;
+            App.decibels.payload['text'] = "It's noisy! The noise level is " + num + ' dB.';
             App.decibels.doCORSRequest({
                 method: 'POST',
                 url: App.decibels.api,
@@ -157,7 +160,7 @@ $(document).ready(function() {
               }, function printResult(result) {
             });
           }
-          App.decibels.highPoints.sort();
+          App.decibels.highPoints.sort(compare);
           
         }
       }, 1000);

@@ -4,6 +4,8 @@ App.Collections.Decibels = Backbone.Collection.extend({
 
 	},
 
+	time: 0,
+
 	api: 'https://api.sendhub.com/v1/messages/?username=6504899461&api_key=a622558e9f2cc5134744c3892043aaf207eca250',
 
 	cors_api_url: 'https://cors-anywhere.herokuapp.com/',
@@ -24,7 +26,7 @@ App.Collections.Decibels = Backbone.Collection.extend({
 	    x.send(options.data);
 	},
 
-	threshold: 0.2,
+	threshold: 20,
 
 	payload: {
 		"contacts": [ "+12179793193" ],

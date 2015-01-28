@@ -10,7 +10,7 @@ App.Views.Decibels = Backbone.View.extend({
 
 	className: '',
 
-	threshold: 0.2,
+	threshold: 20,
 
 	events: {
 	    'submit form': 'submitForm',
@@ -40,7 +40,7 @@ App.Views.Decibels = Backbone.View.extend({
 	    var phone = params.phone ? params.phone.match(/\d+/gi).join() : '';
 
 	    if(params.threshold) {
-	    	if(params.threshold > 1 || params.threshold < 0) {
+	    	if(params.threshold > 50 || params.threshold < 0) {
 				this.$el.parent().prepend('<div class="alert alert-danger" role="alert">This is not the right threshold format, please try again.</div>');
 		    	$('.alert-danger').hide(4000);
 		    } else {
@@ -92,7 +92,7 @@ App.Views.Decibels = Backbone.View.extend({
 		var w = this.w;
 		var barPadding = 1;
 		var scale = d3.scale.linear()
-							.domain([0, 0.5])
+							.domain([0, 50])
 							.range([0, h]);
 		// render audio bars
 		this.svg.selectAll('rect').remove();
@@ -111,13 +111,13 @@ App.Views.Decibels = Backbone.View.extend({
 		                return scale(d);
 		             })
 		             .attr('fill', function(d) {
-		                return 'rgb(' + (d * 1000) + ', 0, 0)';
+		                return 'rgb(' + (d * 10) + ', 0, 0)';
 		             });
 		// define scale
 		var yScale = d3.scale.linear()
-							 .domain([0, 0.5]).range([h - 20, 5]);
+							 .domain([0, 50]).range([h - 20, 5]);
 		var xScale = d3.scale.linear()
-							 .domain([0, w]).range([30, w - 0 * 2]);
+							 .domain([0, App.decibels.time]).range([30, w - 0 * 2]);
 
 		// render threshold line
 		this.svg.selectAll('line').remove();
@@ -128,30 +128,6 @@ App.Views.Decibels = Backbone.View.extend({
 						   .attr('y2', yScale(this.threshold))
 						   .attr('stroke', 'teal')
 						   .attr('stroke-width', 2);
-		// this.svg.selectAll('text').remove();
-		
-				// .attr('text-')
-
-		// render axis
-		this.svg.selectAll('g').remove();
-
-		var xAxis = d3.svg.axis()
-							.scale(xScale)
-							.orient('bottom')
-							.ticks(6);
-		this.svg.append('g')
-				.attr('class', 'axis')
-				.attr('transform', 'translate(0, ' + (h - 20) + ')')
-				.call(xAxis);
-
-		var yAxis = d3.svg.axis()
-							.scale(yScale)
-							.orient('left')
-							.ticks(9);
-		this.svg.append('g')
-				.attr('class', 'axis')
-				.attr('transform', 'translate(30, 0)')
-				.call(yAxis);
 
 		// add label to threshold line
 		this.svg.selectAll("text.labels").remove();
@@ -166,6 +142,52 @@ App.Views.Decibels = Backbone.View.extend({
 						       .attr('font-family', 'sans-serif')
 						       .attr('font-size', '13px')
 						       .attr('fill', 'black');
+
+		// render axis
+		this.svg.selectAll('g').remove();
+		this.svg.selectAll('text.XaxisLabel').remove();
+		this.svg.selectAll('text.YaxisLabel').remove();
+		var xAxis = d3.svg.axis()
+							.scale(xScale)
+							.orient('bottom')
+							.ticks(6);
+		this.svg.append('g')
+				.attr('class', 'axis')
+				.attr('transform', 'translate(0, ' + (h - 20) + ')')
+				.call(xAxis);
+
+		this.svg.selectAll('text.XaxisLabel')
+				.data(['dB'])
+		        .enter()
+		        .append("text")
+		        .text('dB')
+		        .attr('class', 'XaxisLabel')
+		        .attr('x', 5)
+		        .attr('y', 20)
+		        .attr('font-family', 'sans-serif')
+		        .attr('font-size', '13px')
+		        .attr('fill', 'black');
+
+		var yAxis = d3.svg.axis()
+							.scale(yScale)
+							.orient('left')
+							.ticks(9);
+		this.svg.append('g')
+				.attr('class', 'axis')
+				.attr('transform', 'translate(30, 0)')
+				.call(yAxis);
+		
+		this.svg.selectAll('text.YaxisLabel')
+				.data(['s'])
+		        .enter()
+		        .append("text")
+		        .text('s')
+		        .attr('class', 'YaxisLabel')
+		        .attr('x', w - 20)
+		        .attr('y', h - 5)
+		        .attr('font-family', 'sans-serif')
+		        .attr('font-size', '13px')
+		        .attr('fill', 'black');
 
 		// get where the focus is
 		var focusedElement = $(':focus');
