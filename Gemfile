@@ -24,6 +24,9 @@ gem 'coffee-rails', '~> 4.0.0'
 # use ejs templates for backbone
 gem 'ejs'
 
+# use d3
+gem 'd3-rails'
+
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
 
