@@ -53,7 +53,7 @@ App.Views.Decibels = Backbone.View.extend({
 	    		this.$el.parent().prepend('<div class="alert alert-danger" role="alert">This is not the right phone format, please try again.</div>');
 		    	$('.alert-danger').hide(4000);	
 	    	} else {
-	    		this.collection.payload['contacts'] = '+1' + params.phone;	
+	    		this.collection.payload['contacts'] = ['+1' + params.phone];	
 	    	}
 	    }
 
