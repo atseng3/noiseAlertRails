@@ -38,11 +38,11 @@ App.Views.Decibels = Backbone.View.extend({
 	    var params = $(event.currentTarget).serializeJSON();
 
 	    var phone = params.phone ? params.phone.match(/\d+/gi).join() : '';
+	    $('input').removeClass('invalid');
 
 	    if(params.threshold) {
 	    	if(params.threshold > 50 || params.threshold < 0) {
-				this.$el.parent().prepend('<div class="alert alert-danger" role="alert">This is not the right threshold format, please try again.</div>');
-		    	$('.alert-danger').hide(4000);
+	    		$('#threshold').addClass('invalid');
 		    } else {
 			    this.threshold = params.threshold;
 			    this.collection.threshold = params.threshold;
@@ -50,13 +50,11 @@ App.Views.Decibels = Backbone.View.extend({
 	    }
 	    if(phone) {
 	    	if(phone.length != 10) {
-	    		this.$el.parent().prepend('<div class="alert alert-danger" role="alert">This is not the right phone format, please try again.</div>');
-		    	$('.alert-danger').hide(4000);	
+	    		$('#phone').addClass('invalid');
 	    	} else {
 	    		this.collection.payload['contacts'] = ['+1' + params.phone];	
 	    	}
 	    }
-
 	},
 
 	resizeContent: function() {

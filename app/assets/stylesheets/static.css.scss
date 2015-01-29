@@ -111,6 +111,14 @@ form {
         border: 1px solid #DEDEDE;
         font-family: helvetica, arial, sans-serif;
         box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2) inset;
+        &.invalid {
+            box-shadow: 0 0 5px red;
+            border: 1px solid red;
+            -webkit-animation: shake 0.6s;
+        }
+    }
+    input.invalid:focus {
+        outline: none;
     }
     .sendBtn {
         color: #fff;
@@ -132,7 +140,19 @@ form {
         margin-bottom: 10px;
     }
 }
+@-webkit-keyframes shake {
+  0%, 100% {
+    transform: translate3d(0, 0, 0);
+  }
 
+  20%, 60%{
+    transform: translate3d(-5px, 0, 0);
+  }
+
+  40%, 80%{
+    transform: translate3d(5px, 0, 0);
+  }
+}
 .axis path,
 .axis line {
 	fill: none;
