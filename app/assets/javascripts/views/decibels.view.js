@@ -75,7 +75,7 @@ App.Views.Decibels = Backbone.View.extend({
 		this.listenTo(this.collection, 'add', this.render);
 
 		$(window).on('resize', $.proxy(this.resizeContent, this));
-		this.w = $('.container-fluid').width();
+		this.w = $($('.container-fluid')[0]).width();
 		this.h = this.w * this.aspect
 		this.svg = d3.select('#visualizer')
 		                      .append('svg')
